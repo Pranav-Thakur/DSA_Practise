@@ -10,7 +10,7 @@ public class Solution {
     // for i 1 to n then for j = 0 to tar
     // if (j >= arr[i-1]) dp[i][j] = dp[i][j] || dp[i-1][j - arr[i-1]]
 
-    public int _1D_DP(int arr[]) {
+    public int _1D_DP(int[] arr) {
         int n = arr.length;
         int sum = 0;
         for (int x : arr) sum += x;
@@ -20,12 +20,12 @@ public class Solution {
         boolean[] prev = new boolean[tar+1];
         prev[0] = true;
 
-        for (int i = 0; i < n; i++) {
-            System.arraycopy(prev, 0, curr, 0, tar+1);
+        for (int k : arr) {
+            System.arraycopy(prev, 0, curr, 0, tar + 1);
             for (int j = 0; j <= tar; j++) {
-                if (j >= arr[i]) curr[j] = curr[j] || prev[j - arr[i]];
+                if (j >= k) curr[j] = curr[j] || prev[j - k];
             }
-            System.arraycopy(curr, 0, prev, 0, tar+1);
+            System.arraycopy(curr, 0, prev, 0, tar + 1);
         }
 
         int ans = Integer.MAX_VALUE;
@@ -59,12 +59,12 @@ public class Solution {
         boolean[] prev = new boolean[tar+1];
         prev[0] = true;
 
-        for (int i = 0; i < arr.length; i++) {
-            System.arraycopy(prev, 0, curr, 0, tar+1);
+        for (int k : arr) {
+            System.arraycopy(prev, 0, curr, 0, tar + 1);
             for (int j = 0; j <= tar; j++) {
-                if (j >= arr[i]) curr[j] = curr[j] || prev[j - arr[i]];
+                if (j >= k) curr[j] = curr[j] || prev[j - k];
             }
-            System.arraycopy(curr, 0, prev, 0, tar+1);
+            System.arraycopy(curr, 0, prev, 0, tar + 1);
         }
 
         int ans = Integer.MAX_VALUE;
@@ -77,11 +77,41 @@ public class Solution {
         return ans;
     }
 
+
+    public int countMinDiff(int[] arr, int diff) {
+        int n = arr.length;
+        int sum = Arrays.stream(arr).sum();
+
+        int tar = sum/2 + 1;
+        int[] curr = new int[tar+1];
+        int[] prev = new int[tar+1];
+        prev[0] = 1;
+
+        Arrays.stream(prev).forEach(x -> System.out.print(x + " "));
+        System.out.println();
+
+        for (int k : arr) {
+            System.arraycopy(prev, 0, curr, 0, tar + 1);
+            for (int j = 0; j <= tar; j++) {
+                if (j >= k) curr[j] += prev[j - k];
+            }
+            System.arraycopy(curr, 0, prev, 0, tar + 1);
+            Arrays.stream(prev).forEach(x -> System.out.print(x + " "));
+            System.out.println();
+        }
+
+        // as s1 - s2 = diff and s1 + s2 = sum => 2s1 = sum + diff
+        int ans = (sum+diff)/2;
+        if (ans > tar) return 0;
+        return prev[ans];
+    }
+
     public static void main(String[] args) {
         Solution sol = new Solution();
-        int[] arr = {76,8,45,20,74,84,28,1};
+        int[] arr = {1, 1, 2, 3};
         System.out.println("Solution for min subsetSum diff is " + sol.minimumDifference(arr));
         System.out.println("Solution for min subsetSum diff is " + sol._1D_DP(arr));
+        System.out.println("Solution for count subsetSum with diff is " + sol.countMinDiff(arr, 0));
         //sol.printSubsetSum(arr, sum);
     }
 }
