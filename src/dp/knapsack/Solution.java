@@ -46,6 +46,37 @@ public class Solution {
         find(ks, wt, val, n, dp[n][W]);
     }
 
+    public int unboundedKnapSack(int[] wt, int[] val, int capacity) {
+        int n = val.length;
+        int[][] dp = new int[n+1][capacity+1];
+        Arrays.fill(dp[0], 0);
+        for (int i = 1; i <= n; i++) dp[i][0] = 0;
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= capacity; j++) {
+                if (wt[i-1] <= j)
+                    dp[i][j] = Math.max(val[i-1] + dp[i][j-wt[i-1]], dp[i-1][j]);
+                else dp[i][j] = dp[i-1][j];
+            }
+        }
+
+        return dp[n][capacity];
+    }
+
+    public int unboundedKnapSack_1D(int[] wt, int[] val, int capacity) {
+        int n = val.length;
+        int[] dp = new int[capacity+1];
+        Arrays.fill(dp, 0);
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= capacity; j++) {
+                if (wt[i-1] <= j) dp[j] = Math.max(val[i-1] + dp[j-wt[i-1]], dp[j]);
+            }
+        }
+
+        return dp[capacity];
+    }
+
     public static void main(String[] args) {
         Solution sol = new Solution();
         int[] wt = {4, 5, 1, 2};
@@ -53,5 +84,7 @@ public class Solution {
         int W = 6;
         System.out.println("Solution for 01 Knapsack is " + sol.knapsack01(wt, val, wt.length, W));
         sol.printKnapsack(wt, val, wt.length, W);
+        System.out.println("Solution for unbounded Knapsack is " + sol.unboundedKnapSack(wt, val, W));
+        System.out.println("Solution for unbounded Knapsack is " + sol.unboundedKnapSack_1D(wt, val, W));
     }
 }
