@@ -1,0 +1,16 @@
+package system_design.lld.parking_spot.parking.spot;
+
+import system_design.lld.parking_spot.vehicle.Vehicle;
+import system_design.lld.parking_spot.vehicle.VehicleType;
+
+class SmallSpot extends Spot {
+
+    public SmallSpot(int spotId) {
+        super(spotId, SpotType.SMALL);
+    }
+
+    @Override
+    public boolean canFitVehicle(Vehicle vehicle) {
+        return vehicle.getVehicleType() == VehicleType.BIKE;
+    }
+}
