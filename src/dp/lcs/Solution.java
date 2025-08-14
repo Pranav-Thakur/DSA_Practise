@@ -62,6 +62,42 @@ public class Solution {
         System.out.println("The LCS for (" + X + ", " + Y + ") is " + Arrays.toString(str));
     }
 
+    public int shortestCommonSuperSequence(String a, String b) {
+        int lcsLen = lcs(a, b);
+        return (a.length() + b.length() - lcsLen);
+    }
+
+    public void printSCS(String a, String b) {
+        lcs(a, b);
+        int i = a.length(), j = b.length();
+
+        StringBuilder sb = new StringBuilder();
+        while (i > 0 && j > 0) {
+            if (a.charAt(i-1) == b.charAt(j-1)) {
+                sb.append(a.charAt(i-1));
+                i--; j--;
+            } else if (dp[i-1][j] > dp[i][j-1]) {
+                sb.append(a.charAt(i-1));
+                i--;
+            } else {
+                sb.append(b.charAt(j-1));
+                j--;
+            }
+        }
+
+        while (i > 0) {
+            sb.append(a.charAt(i-1));
+            i--;
+        }
+
+        while (j > 0) {
+            sb.append(b.charAt(j-1));
+            j--;
+        }
+
+        System.out.println("The SCS for the strings is " + sb.reverse());
+    }
+
     public static void main(String[] args) {
         Solution sol = new Solution();
         String X = "abcdgh";
@@ -70,5 +106,8 @@ public class Solution {
         System.out.println("The Solution for LCS is " + sol.recur(X, Y, X.length(), Y.length()));
         System.out.println("The Solution for LCS is " + sol.lcs(X, Y));
         sol.printLcs(X, Y);
+
+        System.out.println("The Solution for SCS is " + sol.shortestCommonSuperSequence(X, Y));
+        sol.printSCS(X, Y);
     }
 }
