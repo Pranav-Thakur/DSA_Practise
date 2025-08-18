@@ -39,4 +39,17 @@ public class Floor implements Observer {
                 " | Current Floor: " + elevator.getCurrentFloor() +
                 " | Direction: " + elevator.getDirection());
     }
+
+    @Override
+    public int hashCode() { 
+        return Integer.hashCode(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Floor) {
+            return id == ((Floor) obj).id;
+        }
+        return false;
+    }
 }
