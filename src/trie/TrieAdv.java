@@ -47,15 +47,20 @@ class TrieAdv {
         curr.end = true;
     }
 
-    private int recur(TrieNode curr) {
+    /**
+     * Recursively count all words in the subtree starting from the given node
+     * @param curr Current trie node
+     * @return Total count of words in the subtree
+     */
+    private int countWordsInSubtree(TrieNode curr) {
         if (curr == null) return 0;
-        int ans = 0;
-        if (curr.end) ans = 1;
+        int count = 0;
+        if (curr.end) count = 1;
 
         for (int i = 0; i < curr.childs.length; i++)
-            ans += recur(curr.childs[i]);
+            count += countWordsInSubtree(curr.childs[i]);
         
-        return ans;
+        return count;
     }
 
     public int countWordsEqualTo(String word) {
@@ -68,7 +73,7 @@ class TrieAdv {
         }
 
         if (curr == null) return ans;
-        return recur(curr);
+        return countWordsInSubtree(curr);
     }
 
     public int countWordsStartingWith(String prefix) {
@@ -81,7 +86,7 @@ class TrieAdv {
         }
 
         if (curr == null) return ans;
-        return recur(curr);
+        return countWordsInSubtree(curr);
     }
 
     public void erase(String word) {

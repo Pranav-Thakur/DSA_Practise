@@ -8,7 +8,7 @@ public class Solution {
         System.out.println("The Solution for lis " + sol.lis(arr));
     }
 
-    private int lis(int[] arr) {
+    public int lis(int[] arr) {
         int n = arr.length;
         int[] dp = new int[n+1];
         dp[0] = 0;
