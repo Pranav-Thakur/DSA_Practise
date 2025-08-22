@@ -100,12 +100,35 @@ public class DPTestSuite {
         System.out.println();
     }
     
+    public static void testPalindromePartition() {
+        System.out.println("=== Testing Palindrome Partition ===");
+        
+        dp.palindrome_partition.Solution solution = new dp.palindrome_partition.Solution();
+        
+        // Test 1: Basic case
+        String test1 = "aab";
+        System.out.println("Test 1 - Input: " + test1);
+        System.out.println("Result: " + solution.partition(test1)); // Expected: [[a, a, b], [aa, b]]
+        
+        // Test 2: Single character
+        String test2 = "a";
+        System.out.println("Test 2 - Input: " + test2);
+        System.out.println("Result: " + solution.partition(test2)); // Expected: [[a]]
+        
+        // Test 3: Optimized version
+        System.out.println("Test 3 - Optimized version for 'aab':");
+        System.out.println("Result: " + solution.partitionOptimized(test1));
+        
+        System.out.println();
+    }
+    
     public static void main(String[] args) {
         testCoinChange();
         testLIS();
         testLCS();
         testKnapsack();
         testSubsetSum();
+        testPalindromePartition();
         
         System.out.println("All DP tests completed!");
     }

@@ -4,22 +4,45 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Comprehensive Graph Implementation
+ * 
+ * This class provides a complete graph data structure with multiple representations:
+ * - Adjacency Matrix
+ * - Adjacency List
+ * - Adjacency Map
+ * 
+ * Supports both directed and undirected graphs with BFS and DFS traversal algorithms.
+ * 
+ * Time Complexity:
+ * - Add Edge: O(1)
+ * - BFS/DFS: O(V + E) where V is vertices and E is edges
+ * - Space: O(V^2) for adjacency matrix, O(V + E) for adjacency list/map
+ */
 public class Graph {
-    public int nodes, edges;
-    public Node[][] adjMat;
-    public List<List<Node>> adjList;
-    public Map<Integer, List<Node>> adjMap;
+    private int nodes, edges;
+    private Node[][] adjMat;
+    private List<List<Node>> adjList;
+    private Map<Integer, List<Node>> adjMap;
 
-    private static class Node {
-        public int id;
-        public String name;
+    /**
+     * Node class representing a vertex in the graph
+     */
+    public static class Node {
+        private int id;
+        private String name;
 
-        public Node(int d, String name) {
-            id = d; this.name = name;
+        public Node(int id, String name) {
+            this.id = id; 
+            this.name = name;
         }
 
-        public String print() {
-            return ("(Id: " + id + ", Name: " + name + ")");
+        public int getId() { return id; }
+        public String getName() { return name; }
+
+        @Override
+        public String toString() {
+            return "(Id: " + id + ", Name: " + name + ")";
         }
 
         public static Node getNode(int id, String name) {
@@ -27,27 +50,36 @@ public class Graph {
         }
     }
 
-    public Graph(int v) {
-        this(v, 0);
+    /**
+     * Constructor for a graph with given number of vertices
+     * @param vertices Number of vertices in the graph
+     */
+    public Graph(int vertices) {
+        this(vertices, 0);
     }
 
-    public Graph(int v, int e) {
-        nodes = v; edges = e;
-        adjMat = new Node[v][v];
-        // what below line does is create a single L and then add that same ref to v copies 
-        // Collections.nCopies(n, obj) → same object repeated n times.
-        //adjList = new ArrayList<>(Collections.nCopies(v, new ArrayList<Node>()));
-
-        /* old way
-        adjList = new ArrayList<>(v);
-        for (int i = 0; i < v; i++) {
-            adjList.add(new ArrayList<Node>());
-        } */
+    /**
+     * Constructor for a graph with given number of vertices and edges
+     * @param vertices Number of vertices in the graph
+     * @param edges Number of edges (for documentation purposes)
+     */
+    public Graph(int vertices, int edges) {
+        if (vertices < 0) {
+            throw new IllegalArgumentException("Number of vertices cannot be negative");
+        }
         
-        adjList = new ArrayList<>(IntStream.range(0, v)
+        this.nodes = vertices; 
+        this.edges = 0; // Start with 0 edges
+        
+        // Initialize adjacency matrix
+        adjMat = new Node[vertices][vertices];
+        
+        // Initialize adjacency list using streams for better performance
+        adjList = new ArrayList<>(IntStream.range(0, vertices)
             .mapToObj(i -> new ArrayList<Node>())
             .collect(Collectors.toList()));
 
+        // Initialize adjacency map
         adjMap = new HashMap<>();
     }
 
@@ -79,7 +111,7 @@ public class Graph {
                 String str = null;
                 if (adjMat[i][j] == null)
                     str = "null";
-                else str = adjMat[i][j].print();
+                else str = adjMat[i][j].toString();
                 System.out.print(str + "    ");
             }
             System.out.println();
@@ -89,7 +121,7 @@ public class Graph {
         adjList.stream().forEach(list -> {
             //System.out.print("For " + key + "    ");
             list.stream().forEach(node -> {
-                System.out.print(node.print() + "    ");
+                System.out.print(node.toString() + "    ");
             });
             System.out.println();
         });
@@ -98,7 +130,7 @@ public class Graph {
         adjMap.forEach((key, list) -> {
             System.out.print("For " + key + "    ");
             list.stream().forEach(node -> {
-                System.out.print(node.print() + "    ");
+                System.out.print(node.toString() + "    ");
             });
             System.out.println();
         });
@@ -109,16 +141,16 @@ public class Graph {
         boolean[] visited = new boolean[nodes];
         Queue<Node> q = new LinkedList<>();
         q.offer(src);
-        visited[src.id] = true;
+        visited[src.getId()] = true;
 
-        System.out.print("\n\nBFS with src " + src.print() + " is    ");
+        System.out.print("\n\nBFS with src " + src.toString() + " is    ");
         while (!q.isEmpty()) {
             Node n = q.poll();
-            System.out.print(n.print() + "    ");
+            System.out.print(n.toString() + "    ");
 
-            adjMap.get(n.id).forEach(node -> {
-                if (!visited[node.id]) {
-                    visited[node.id] = true;
+            adjMap.get(n.getId()).forEach(node -> {
+                if (!visited[node.getId()]) {
+                    visited[node.getId()] = true;
                     q.offer(node);
                 }
             });
@@ -131,16 +163,16 @@ public class Graph {
         boolean[] visited = new boolean[nodes];
         Stack<Node> stack = new Stack<>();
         stack.push(src);
-        visited[src.id] = true;
+        visited[src.getId()] = true;
 
-        System.out.print("\n\nDFS with src " + src.print() + " is    ");
+        System.out.print("\n\nDFS with src " + src.toString() + " is    ");
         while (!stack.isEmpty()) {
             Node n = stack.pop();
-            System.out.print(n.print() + "    ");
+            System.out.print(n.toString() + "    ");
 
-            adjMap.get(n.id).forEach(node -> {
-                if (!visited[node.id]) {
-                    visited[node.id] = true;
+            adjMap.get(n.getId()).forEach(node -> {
+                if (!visited[node.getId()]) {
+                    visited[node.getId()] = true;
                     stack.push(node);
                 }
             });
