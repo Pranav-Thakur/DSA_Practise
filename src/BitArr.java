@@ -92,9 +92,14 @@ public class BitArr {
 
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            int bitCount = BIT_COUNT_ARRAY[mid];
+            int cumulativeBitCount = 0;
             
-            if (bitCount >= targetBitCount) {
+            // Calculate cumulative bit count up to mid
+            for (int i = 1; i <= mid; i++) {
+                cumulativeBitCount += BIT_COUNT_ARRAY[i];
+            }
+            
+            if (cumulativeBitCount >= targetBitCount) {
                 result = mid;
                 right = mid - 1;
             } else {
