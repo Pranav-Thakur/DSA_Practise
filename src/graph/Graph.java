@@ -74,6 +74,16 @@ public class Graph {
         // Initialize adjacency matrix
         adjMat = new Node[vertices][vertices];
         
+        // what below line does is create a single L and then add that same ref to v copies 
+        // Collections.nCopies(n, obj) → same object repeated n times.
+        //adjList = new ArrayList<>(Collections.nCopies(v, new ArrayList<Node>()));
+
+        /* old way
+        adjList = new ArrayList<>(v);
+        for (int i = 0; i < v; i++) {
+            adjList.add(new ArrayList<Node>());
+        } */
+
         // Initialize adjacency list using streams for better performance
         adjList = new ArrayList<>(IntStream.range(0, vertices)
             .mapToObj(i -> new ArrayList<Node>())
@@ -148,6 +158,7 @@ public class Graph {
             Node n = q.poll();
             System.out.print(n.toString() + "    ");
 
+            if (adjMap.get(n.getId()) == null) continue;
             adjMap.get(n.getId()).forEach(node -> {
                 if (!visited[node.getId()]) {
                     visited[node.getId()] = true;
